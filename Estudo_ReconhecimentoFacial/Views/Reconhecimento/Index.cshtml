@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>Reconhecimento Facial</title>
+    <style>
+        video, canvas {
+            position: absolute;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" width="800" height="500" preload="auto" autoplay loop muted></video>
+    <canvas id="canvas" width="800" height="500"></canvas>
+
+    <script src="~/js/tracking-min.js"></script>
+    <script src="~/js/data/face-min.js"></script>
+
+    <script>
+        function init() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            const tracker = new tracking.ObjectTracker('face');
+            tracking.track('#video', tracker, { camera: true });
+            tracker.on('track', event => {
+                console.log(event);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                event.data.forEach(rect => {
+                    console.log(rect);
+                });
+            });
+
+        }
+
+        window.onload = init();
+    </script>
+</body>
+</html>
